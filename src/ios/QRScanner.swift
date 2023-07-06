@@ -158,7 +158,21 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
                 metaOutput = AVCaptureMetadataOutput()
                 captureSession!.addOutput(metaOutput!)
                 metaOutput!.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-                metaOutput!.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
+                metaOutput!.metadataObjectTypes = [
+                    AVMetadataObject.ObjectType.aztec,
+                    AVMetadataObject.ObjectType.code128,
+                    AVMetadataObject.ObjectType.code39,
+                    AVMetadataObject.ObjectType.code39Mod43,
+                    AVMetadataObject.ObjectType.code93,
+                    AVMetadataObject.ObjectType.dataMatrix,
+                    AVMetadataObject.ObjectType.ean13,
+                    AVMetadataObject.ObjectType.ean8,
+                    AVMetadataObject.ObjectType.interleaved2of5,
+                    AVMetadataObject.ObjectType.itf14,
+                    AVMetadataObject.ObjectType.pdf417,
+                    AVMetadataObject.ObjectType.qr,
+                    AVMetadataObject.ObjectType.upce
+                ]
                 captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
                 cameraView.addPreviewLayer(captureVideoPreviewLayer)
                 captureSession!.startRunning()
@@ -244,7 +258,21 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         let found = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        if found.type == AVMetadataObject.ObjectType.qr && found.stringValue != nil {
+        let typeMatched = found.type == AVMetadataObjectTypeAztecCode
+            || found.type == AVMetadataObjectTypeCode128Code
+            || found.type == AVMetadataObjectTypeCode39Code
+            || found.type == AVMetadataObjectTypeCode39Mod43Code
+            || found.type == AVMetadataObjectTypeCode93Code
+            || found.type == AVMetadataObjectTypeDataMatrixCode
+            || found.type == AVMetadataObjectTypeEAN13Code
+            || found.type == AVMetadataObjectTypeEAN8Code
+            || found.type == AVMetadataObjectTypeInterleaved2of5Code
+            || found.type == AVMetadataObjectTypeITF14Code
+            || found.type == AVMetadataObjectTypePDF417Code
+            || found.type == AVMetadataObjectTypeQRCode
+            || found.type == AVMetadataObjectTypeUPCECode
+
+        if (typeMatched && found.stringValue != nil) {
             scanning = false
             let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue)
             commandDelegate!.send(pluginResult, callbackId: nextScanningCommand?.callbackId!)
