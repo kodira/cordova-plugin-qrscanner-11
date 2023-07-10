@@ -258,19 +258,19 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         let found = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        let typeMatched = found.type == AVMetadataObjectTypeAztecCode
-            || found.type == AVMetadataObjectTypeCode128Code
-            || found.type == AVMetadataObjectTypeCode39Code
-            || found.type == AVMetadataObjectTypeCode39Mod43Code
-            || found.type == AVMetadataObjectTypeCode93Code
-            || found.type == AVMetadataObjectTypeDataMatrixCode
-            || found.type == AVMetadataObjectTypeEAN13Code
-            || found.type == AVMetadataObjectTypeEAN8Code
-            || found.type == AVMetadataObjectTypeInterleaved2of5Code
-            || found.type == AVMetadataObjectTypeITF14Code
-            || found.type == AVMetadataObjectTypePDF417Code
-            || found.type == AVMetadataObjectTypeQRCode
-            || found.type == AVMetadataObjectTypeUPCECode
+        let typeMatched = found.type == AVMetadataObject.ObjectType.aztec
+            || found.type == AVMetadataObject.ObjectType.code128
+            || found.type == AVMetadataObject.ObjectType.code39
+            || found.type == AVMetadataObject.ObjectType.code39Mod43
+            || found.type == AVMetadataObject.ObjectType.code93
+            || found.type == AVMetadataObject.ObjectType.dataMatrix
+            || found.type == AVMetadataObject.ObjectType.ean13
+            || found.type == AVMetadataObject.ObjectType.ean8
+            || found.type == AVMetadataObject.ObjectType.interleaved2of5
+            || found.type == AVMetadataObject.ObjectType.itf14
+            || found.type == AVMetadataObject.ObjectType.pdf417
+            || found.type == AVMetadataObject.ObjectType.qr
+            || found.type == AVMetadataObject.ObjectType.upce
 
         if (typeMatched && found.stringValue != nil) {
             scanning = false
