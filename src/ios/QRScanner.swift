@@ -1,4 +1,5 @@
 import Foundation
+import WebKit
 import AVFoundation
 
 @objc(QRScanner)
@@ -92,7 +93,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     func sendErrorCode(command: CDVInvokedUrlCommand, error: QRScannerError){
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.rawValue)
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.error, messageAs: error.rawValue)
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
@@ -218,7 +219,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     @objc func makeOpaque(){
         self.webView?.isOpaque = true
         self.webView?.backgroundColor = UIColor.white
-        self.webView?.scrollView.backgroundColor = UIColor.white
+        (self.webView as? WKWebView)?.scrollView.backgroundColor = UIColor.white
     }
 
     @objc func boolToNumberString(bool: Bool) -> String{
@@ -274,8 +275,8 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
 
         if (typeMatched && found.stringValue != nil) {
             scanning = false
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue)
-            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand?.callbackId!)
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: found.stringValue!)
+            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand!.callbackId)
             nextScanningCommand = nil
         }
     }
@@ -326,7 +327,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     @objc func show(_ command: CDVInvokedUrlCommand) {
         self.webView?.isOpaque = false
         self.webView?.backgroundColor = UIColor.clear
-        self.webView?.scrollView.backgroundColor = UIColor.clear
+        (self.webView as? WKWebView)?.scrollView.backgroundColor = UIColor.clear
         self.getStatus(command)
     }
 
@@ -497,7 +498,7 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
             "currentCamera": String(currentCamera)
         ]
 
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: status)
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: status)
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
